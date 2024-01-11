@@ -7,7 +7,8 @@ import 'package:pixel_adventure/models/actors.dart';
 
 class Level extends World {
   final String levelName;
-  Level({required this.levelName});
+  final Actors actors;
+  Level({required this.actors, required this.levelName});
   late TiledComponent level;
   @override
   FutureOr<void> onLoad() async {
@@ -15,6 +16,7 @@ class Level extends World {
       '$levelName.tmx',
       Vector2.all(16),
     );
+    // print(levelName);
 
     add(level);
     final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
@@ -22,11 +24,8 @@ class Level extends World {
     for (final spawnPoint in spawnPointsLayer!.objects) {
       switch (spawnPoint.class_) {
         case 'Player':
-          final player = Actors(
-            character: 'Mask Dude',
-            position: Vector2(spawnPoint.x, spawnPoint.y),
-          );
-          add(player);
+          actors.position = Vector2(spawnPoint.x, spawnPoint.y);
+          add(actors);
           break;
         default:
       }
